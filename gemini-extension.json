@@ -1,6 +1,6 @@
 {
   "name": "gonggongilgam",
-  "version": "0.1.0",
+  "version": "0.8.0",
   "mcpServers": {
     "gonggongilgam": {
       "httpUrl": "https://work-api.00data.kr/mcp"

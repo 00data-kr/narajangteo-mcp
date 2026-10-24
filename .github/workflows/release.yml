@@ -1,0 +1,52 @@
+# server.json의 version이 새 판이면 태그 + 릴리스를 만든다.
+# 릴리스 노트는 CHANGELOG.md에서 그 판의 절(## v0.8.0 …)을 그대로 옮긴다 — 절이 없으면 한 줄 안내.
+name: release
+
+on:
+  push:
+    branches: [main]
+    paths: [server.json, CHANGELOG.md, .github/workflows/release.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 판 번호 읽기
+        id: v
+        run: echo "tag=v$(jq -r .version server.json)" >> "$GITHUB_OUTPUT"
+
+      - name: 이미 낸 판이면 건너뛰기
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "${{ steps.v.outputs.tag }}" >/dev/null 2>&1; then
+            echo "skip=1" >> "$GITHUB_OUTPUT"
+            echo "${{ steps.v.outputs.tag }} 은 이미 있다 — 건너뜀"
+          fi
+
+      - name: 릴리스 노트 — CHANGELOG.md의 그 판 절
+        if: steps.check.outputs.skip != '1'
+        id: notes
+        env:
+          TAG: ${{ steps.v.outputs.tag }}
+        run: |
+          # 「## v0.8.0 — 제목 (날짜)」 줄부터 다음 「## 」 앞까지가 본문, 그 줄의 「## 」 뒤가 제목
+          title=$(awk -v t="$TAG" '/^## /{ if ($2 == t) { sub(/^## /, ""); print; exit } }' CHANGELOG.md)
+          awk -v t="$TAG" '/^## /{ p = ($2 == t); next } p' CHANGELOG.md > notes.md
+          if [ ! -s notes.md ]; then echo "변경 내용은 커밋 기록을 보세요." > notes.md; fi
+          echo "title=${title:-$TAG}" >> "$GITHUB_OUTPUT"
+
+      - name: 태그 + 릴리스 만들기
+        if: steps.check.outputs.skip != '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ steps.v.outputs.tag }}" --target "$GITHUB_SHA" \
+            --title "${{ steps.notes.outputs.title }}" --notes-file notes.md
