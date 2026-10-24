@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "gonggongilgam": {
+      "type": "http",
+      "url": "https://work-api.00data.kr/mcp"
+    }
+  }
+}

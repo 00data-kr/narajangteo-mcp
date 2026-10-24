@@ -1,0 +1,15 @@
+{
+  "name": "gonggongilgam",
+  "displayName": "공공일감 — 나라장터 입찰공고",
+  "description": "나라장터 · 누리장터 · 국방전자조달 · LH · K-water · 한전 · 가스공사 입찰공고를 찾고 첨부 원문까지 읽는다. 맞춤추천 · 즐겨찾기 · 내 조건을 대화로 저장한다.",
+  "version": "0.1.0",
+  "author": {
+    "name": "공공데이터",
+    "url": "https://work.00data.kr"
+  },
+  "homepage": "https://work.00data.kr/ai/mcp",
+  "repository": "https://github.com/00data-kr/narajangteo-mcp",
+  "license": "MIT",
+  "keywords": ["narajangteo", "g2b", "koneps", "korea", "procurement", "bid", "나라장터", "입찰공고"],
+  "mcpServers": "./.mcp.json"
+}

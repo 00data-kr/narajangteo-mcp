@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>공공일감 README 대화 장면</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable.css">
+<style>
+  /* README 그림용 대화 장면 — 각 .scene을 요소 스크린샷으로 찍는다(폭 720 · 2배) */
+  :root {
+    --bg: #f3f5f8; --card: #fff; --line: #e5e8ee; --ink: #15181e; --sub: #5b6270;
+    --blue: #3563e9; --blue-weak: #eef3ff; --chip: #f4f5f7; --red: #d93a3a; --red-weak: #fff1f1; --green: #1f9d55;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body { font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif; background: #fff; color: var(--ink); }
+  .scene { width: 720px; padding: 28px; background: var(--bg); margin-bottom: 40px; }
+  .card { background: var(--card); border-radius: 18px; box-shadow: 0 6px 24px rgba(20, 30, 60, .08); overflow: hidden; }
+  .head { display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; border-bottom: 1px solid var(--line); font-size: 14px; color: var(--sub); }
+  .head .on::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--blue); margin-right: 8px; vertical-align: 1px; }
+  .body { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+  .ask { align-self: flex-end; max-width: 80%; background: var(--blue); color: #fff; padding: 12px 16px; border-radius: 18px 18px 4px 18px; font-size: 16px; line-height: 1.5; }
+  .tools { display: flex; gap: 6px; }
+  .tools span { font-size: 13px; color: var(--sub); background: var(--chip); border: 1px solid var(--line); border-radius: 6px; padding: 3px 8px; }
+  .say { font-size: 16px; line-height: 1.6; }
+  .list { border: 1px solid var(--line); border-radius: 12px; max-width: 92%; }
+  .row { padding: 12px 16px; border-top: 1px solid var(--line); }
+  .row:first-child { border-top: 0; }
+  .row b { display: block; font-size: 16px; line-height: 1.45; }
+  .row small { display: block; font-size: 14px; color: var(--sub); margin-top: 3px; }
+  .ok { color: var(--green); font-weight: 600; }
+  .no { color: var(--red); font-weight: 600; }
+  .new { display: inline-block; font-size: 12px; font-weight: 700; color: #fff; background: var(--blue); border-radius: 5px; padding: 1px 6px; margin-right: 6px; vertical-align: 2px; }
+  table.t { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+  .t th { text-align: left; font-weight: 600; color: var(--sub); font-size: 13px; padding: 9px 12px; background: #fafbfc; border-bottom: 1px solid var(--line); }
+  .t td { padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; line-height: 1.45; }
+  .t tr:last-child td { border-bottom: 0; }
+  .t td.n { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .t td small { display: block; color: var(--sub); font-size: 13px; }
+  /* 첨부 읽기 카드 */
+  .doc { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; max-width: 92%; }
+  .doc .top { background: var(--blue); color: #fff; padding: 14px 18px; }
+  .doc .top em { font-style: normal; font-size: 13px; opacity: .85; }
+  .doc .top b { display: block; font-size: 17px; margin: 4px 0 6px; }
+  .doc .top span { font-size: 14px; opacity: .92; }
+  .doc .top i { font-style: normal; background: #fff; color: var(--blue); font-weight: 700; font-size: 12.5px; border-radius: 10px; padding: 2px 8px; margin-right: 6px; }
+  .doc .sec { padding: 14px 18px; border-top: 1px solid var(--line); font-size: 15.5px; line-height: 1.55; }
+  .doc .sec h4 { font-size: 14px; color: var(--blue); margin-bottom: 6px; }
+  .doc ol { padding-left: 20px; }
+  .bar { display: grid; grid-template-columns: 120px 1fr 40px; align-items: center; gap: 10px; font-size: 14.5px; margin-top: 6px; }
+  .bar div { height: 8px; border-radius: 4px; background: linear-gradient(90deg, #dbe5ff, var(--blue)); }
+  .bar span { text-align: right; font-weight: 600; }
+  .warn { margin-top: 10px; border: 1px solid var(--red); color: var(--red); border-radius: 8px; padding: 8px 12px; font-size: 14px; font-weight: 600; }
+  /* 맞춤추천 웹 화면 조각 */
+  .web { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+  .web .bar-top { background: var(--blue); color: #fff; font-size: 14px; font-weight: 600; padding: 9px 16px; }
+  .chips { display: flex; gap: 8px; padding: 12px 16px 4px; }
+  .chips span { font-size: 14px; border: 1px solid var(--line); border-radius: 16px; padding: 5px 12px; color: var(--sub); }
+  .chips span.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .chips span sup { font-size: 11px; font-weight: 700; background: var(--blue); color: #fff; border-radius: 8px; padding: 0 6px; margin-left: 6px; vertical-align: 2px; }
+</style>
+</head>
+<body>
+
+<!-- 1 말하면 찾습니다 — 축제 · 행사 · 실제 공고(2026-10-24) -->
+<section class="scene" id="s-find">
+  <div class="card">
+    <div class="head"><span class="on">AI 앱 · 공공일감 연결됨</span><span>예시 · 실제 공고</span></div>
+    <div class="body">
+      <div class="ask">1억 아래 축제 · 행사 대행 공고 찾아줘</div>
+      <div class="tools"><span>공고 찾기</span></div>
+      <div class="say">진행 중인 축제 · 행사 대행 중 1억 아래가 95건이에요. 마감 빠른 순으로:</div>
+      <div class="list">
+        <div class="row"><b>2026 앵커사업 지산학연협력 · 미래인재 페스티벌 운영 용역</b><small>한국기술교육대학교산학협력단 · 8,000만 원 · 10월 30일 마감</small></div>
+        <div class="row"><b>2026 성동 글로벌 문화체험 축제 운영 용역</b><small>서울특별시 성동구 · 6,091만 원 · 11월 2일 마감</small></div>
+        <div class="row"><b>「2026년 소상공인 도약 지원사업 호남권 로컬페스타」 행사 용역</b><small>(재)광주창조경제혁신센터 · 9,136만 원 · 11월 2일 마감</small></div>
+      </div>
+      <div class="say">지역을 정해 주시면 더 좁혀 드릴게요.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 2 물품까지 — 교복 -->
+<section class="scene" id="s-goods">
+  <div class="card">
+    <div class="head"><span class="on">AI 앱 · 공공일감 연결됨</span><span>예시 · 실제 공고</span></div>
+    <div class="body">
+      <div class="ask">서울에 교복 구매 입찰 낸 학교 있어?</div>
+      <div class="tools"><span>공고 찾기</span></div>
+      <div class="say">서울 학교의 교복 구매 입찰이 75건 진행 중이에요. 몇 곳만 보면:</div>
+      <div class="list">
+        <div class="row"><b>2027학년도 서울외국어고등학교 교복 주관구매 2단계 입찰</b><small>서울특별시교육청 · 7,204만 원 · 10월 27일 마감</small></div>
+        <div class="row"><b>2027학년도 한국삼육고등학교 교복 구매</b><small>서울특별시교육청 · 5,117만 원 · 10월 27일 마감</small></div>
+        <div class="row"><b>2027학년도 신일중학교 신입생 학교주관 교복(동복 · 하복) 제조 · 구매</b><small>서울특별시성북교육청 · 3,115만 원 · 10월 27일 마감</small></div>
+      </div>
+      <div class="say">제출 서류가 학교마다 달라요. 들어가실 곳을 고르면 첨부를 읽어 정리해 드릴게요.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 들어갈 수 있는지 — 내 조건 판정 -->
+<section class="scene" id="s-fit">
+  <div class="card">
+    <div class="head"><span class="on">AI 앱 · 공공일감 연결됨</span><span>예시 · 실제 공고</span></div>
+    <div class="body">
+      <div class="ask">우리 회사는 본사 서울이고 소프트웨어사업자야. 이번 달 마감 SW 유지관리 중에 들어갈 수 있는 것만 봐 줘</div>
+      <div class="tools"><span>내 조건 저장</span><span>공고 찾기</span><span>공고 읽기</span></div>
+      <div class="say">기억해 둘게요 — 본사 서울 · 소프트웨어사업자(컴퓨터관련서비스사업). 공고마다 따져 보면:</div>
+      <div class="list">
+        <div class="row"><b>[정보,010] 2027년 의료방사선 안전관리 플랫폼 유지관리</b><small>질병관리청 · 1억 5,091만 원 · 지역 <span class="ok">✓</span> · 업종 <span class="ok">✓</span></small></div>
+        <div class="row"><b>온라인시험분석시스템 운영지원 및 유지보수</b><small>한국지질자원연구원 · 5,864만 원 · 지역 <span class="ok">✓</span> · 업종 <span class="ok">✓</span></small></div>
+        <div class="row"><b>2027년 물공급운영시스템 유지관리 용역</b><small>부산광역시 상수도사업본부 · 1억 8,254만 원 · 지역 <span class="no">✗</span> 부산 업체만</small></div>
+      </div>
+      <div class="say">부산 건은 지역 제한이 있어서, 들어갈 수 있는 건 위의 2건이에요.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 첨부까지 읽습니다 — NRC 공고 첨부 분석 -->
+<section class="scene" id="s-read">
+  <div class="card">
+    <div class="head"><span class="on">AI 앱 · 공공일감 연결됨</span><span>예시 · 실제 공고의 첨부</span></div>
+    <div class="body">
+      <div class="ask">NRC 홈페이지 건, 무슨 일이고 배점은 어때?</div>
+      <div class="tools"><span>공고 읽기</span><span>첨부 문서 읽기</span></div>
+      <div class="say">제안요청서를 읽어 정리했어요.</div>
+      <div class="doc">
+        <div class="top"><em>첨부 문서 분석</em><b>2027년 NRC 홈페이지 운영 · 유지관리 사업</b><span><i>진행 중</i>경제인문사회연구회 · 5,000만 원</span></div>
+        <div class="sec"><h4>이 사업은</h4>국문 · 영문 홈페이지와 웹진, 관리자 시스템(CMS)을 운영 · 유지관리하는 일이에요.</div>
+        <div class="sec"><h4>할 일</h4><ol><li>웹진 제작 연 2개 호 — 호마다 기사 20~30개</li><li>뉴스레터 매주 약 3,000명 발송</li><li>접속 통계 · UX 분석 월간 리포트</li></ol></div>
+        <div class="sec"><h4>배점표 · 큰 순</h4>
+          <div class="bar">사업 이해도<div style="width:100%"></div><span>10점</span></div>
+          <div class="bar">성능 요구사항<div style="width:80%"></div><span>8점</span></div>
+          <div class="bar">품질 요구사항<div style="width:70%"></div><span>7점</span></div>
+          <div class="warn">기술평가 85% 이상이면 협상적격자예요.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 경쟁과 금액 — 서울 축제 대행 낙찰 결과 (낙찰가 = 부가세 포함 · 예산 = 추정가격 × 1.1) -->
+<section class="scene" id="s-compete">
+  <div class="card">
+    <div class="head"><span class="on">AI 앱 · 공공일감 연결됨</span><span>예시 · 실제 낙찰 결과</span></div>
+    <div class="body">
+      <div class="ask">성동 축제 건이랑 비슷한 사업, 누가 얼마에 가져갔어?</div>
+      <div class="tools"><span>비슷한 공고</span></div>
+      <div class="say">올해 서울에서 끝난 비슷한 축제 대행 4건이에요.</div>
+      <div class="list" style="max-width:100%">
+        <table class="t">
+          <tr><th>공고</th><th>참가</th><th style="text-align:right">낙찰가</th><th style="text-align:right">예산 대비</th></tr>
+          <tr><td>2026 천호공원 가을축제 행사대행<small>동부공원여가센터 · ㈜아○○</small></td><td class="n">3곳</td><td class="n">7,820만 원</td><td class="n">92%</td></tr>
+          <tr><td>2026년 성북동길 로컬브랜드 축제 운영<small>서울신용보증재단 · ㈜획○○</small></td><td class="n">4곳</td><td class="n">7,799만 원</td><td class="n">98%</td></tr>
+          <tr><td>마포농수산물시장 축제특화사업(야시장행사)<small>시장육성사업단 · ㈜마○○○○○</small></td><td class="n">3곳</td><td class="n">7,250만 원</td><td class="n">99%</td></tr>
+          <tr><td>(긴급) 2026년 동작 빵도동 축제 운영대행<small>동작문화재단 · ㈜크○○○○○</small></td><td class="n">6곳</td><td class="n">1억 6,059만 원</td><td class="n">100%</td></tr>
+        </table>
+      </div>
+      <div class="say">모두 협상에 의한 계약으로 3~6곳이 겨뤘고, 예산의 92~100% 선에서 낙찰됐어요.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 새 공고를 알아서 모아 둡니다 — 대화로 저장 → 웹 맞춤추천에 「새」 -->
+<section class="scene" id="s-reco">
+  <div class="card">
+    <div class="head"><span class="on">AI 앱 · 공공일감 연결됨</span><span>예시 · 실제 공고</span></div>
+    <div class="body">
+      <div class="ask">서울 축제 · 행사 대행, 새 공고 나오면 계속 모아 줘</div>
+      <div class="tools"><span>맞춤추천 저장</span></div>
+      <div class="say">「서울 축제 · 행사 대행」 맞춤추천으로 저장했어요. 새 공고가 올라오면 공공일감에 「새」로 쌓여요.</div>
+      <div class="web">
+        <div class="bar-top">공공일감 · 맞춤추천</div>
+        <div class="chips"><span>추천</span><span class="on">서울 축제 · 행사 대행<sup>3</sup></span></div>
+        <div class="row" style="border-top:0"><b><span class="new">새</span>2026 성동 글로벌 문화체험 축제 운영 용역</b><small>서울특별시 성동구 · 6,091만 원 · 11월 2일 마감</small></div>
+        <div class="row"><b><span class="new">새</span>2026년 제18회 나란다축제 기획 · 운영 대행 용역</b><small>사단법인 상월결사 · 1억 909만 원 · 11월 3일 마감</small></div>
+        <div class="row"><b><span class="new">새</span>서울스프링페스티벌 2027 대행 용역</b><small>서울특별시 · 36억 8,670만 원 · 11월 10일 마감</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

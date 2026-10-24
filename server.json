@@ -1,0 +1,18 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "kr.00data/narajangteo",
+  "title": "공공일감 — 나라장터 입찰공고",
+  "description": "Search Korean public bid notices (Narajangteo/G2B, D2B, LH, K-water, KEPCO, KOGAS) and read attachments.",
+  "version": "0.8.0",
+  "websiteUrl": "https://work.00data.kr/ai/mcp",
+  "repository": {
+    "url": "https://github.com/00data-kr/narajangteo-mcp",
+    "source": "github"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://work-api.00data.kr/mcp"
+    }
+  ]
+}

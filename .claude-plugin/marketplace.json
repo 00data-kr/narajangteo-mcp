@@ -1,0 +1,22 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "00data-kr",
+  "description": "공공데이터(00data.kr) Claude Code 플러그인",
+  "owner": {
+    "name": "공공데이터"
+  },
+  "plugins": [
+    {
+      "name": "gonggongilgam",
+      "displayName": "공공일감 — 나라장터 입찰공고",
+      "description": "나라장터 · 누리장터 · 국방전자조달 · LH · K-water · 한전 · 가스공사 입찰공고를 찾고 첨부 원문까지 읽는다.",
+      "version": "0.1.0",
+      "author": {
+        "name": "공공데이터"
+      },
+      "source": "./",
+      "category": "productivity",
+      "homepage": "https://github.com/00data-kr/narajangteo-mcp"
+    }
+  ]
+}
